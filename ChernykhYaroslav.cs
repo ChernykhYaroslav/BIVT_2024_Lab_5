@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Numerics;
 using System.Reflection;
 using System.Reflection.Metadata;
@@ -74,7 +75,8 @@ public class Program
         int answer = 0;
 
         // code here
-
+        if(GetDistance(v1, a1, time) == GetDistance(v2, a2, time)) answer = 0;
+        answer = GetDistance(v1, a1, time) > GetDistance(v2, a2, time) ? 1 : 2; 
         // create and use GetDistance(v, a, t); t - hours
         // first = 1, second = 2, equal = 0
 
@@ -88,13 +90,22 @@ public class Program
         int answer = 0;
 
         // code here
-
+        for(int i = 1; ; i++)
+            if(GetDistance(v1, a1, i) < GetDistance(v2, a2, i)){
+                answer = i;
+                break;
+            }
+        
         // create and use GetDistance(v, a, t); t - hours
 
         // end
 
         return answer;
     }
+    public static double GetDistance(double v, double a, int t){
+        return v*t + (a*t*t)/2;
+    }
+
     #endregion
 
     #region Level 2
@@ -103,10 +114,23 @@ public class Program
         // code here
 
         // create and use FindMax(matrix);
+        int[] aInfo = FindMax(A);
+        int[] bInfo = FindMax(B);
 
+        int temp = A[aInfo[1], aInfo[2]];
+        A[aInfo[1], aInfo[2]] = B[bInfo[1], bInfo[2]];
+        B[bInfo[1], bInfo[2]] = temp;
         // end
     }
-
+    public static int[] FindMax(int[,] matrix){
+        int[] max = new int[] {-999999, -1, -1};
+        for(int i = 0; i < matrix.GetLength(0); i++){
+            for(int j = 0; i < matrix.GetLength(1); j++){
+                if(matrix[i, j] > max[0]){ max[0] = matrix[i, j]; max[1] = i; max[2] = j; }
+            }
+        }
+        return max;
+    }
     public void Task_2_2(double[] A, double[] B)
     {
         // code here
@@ -124,7 +148,17 @@ public class Program
 
         // end
     }
-
+    public static int[] FindDiagonalMax(int[,] matrix){
+        //max object - index, i, j
+        int[] max = new int[]{-999999, -1, -1};
+        for(int i = 0; i < matrix.GetLength(0); i++){
+            if(matrix[i, i] > max[0]){max[0] = matrix[i, i]; max[1] = max[2] = i; }
+        }
+        for(int i = 0; i < matrix.GetLength(0); i++){
+            if(matrix[i, matrix.GetLength(0)-i] > max[0]){max[0] = matrix[i, matrix.GetLength(0)-i]; max[1] = max[2] = i; }
+        }
+        return max;
+    }
     public void Task_2_4(int[,] A, int[,] B)
     {
         // code here
