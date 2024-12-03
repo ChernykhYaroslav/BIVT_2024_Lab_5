@@ -13,8 +13,20 @@ public class Program
     public static void Main()
     {
         Program program = new Program();
+        int[,] matrix5x6 = new int[,] {
+            { 1, 2, 3, 4, 5, -1 },
+            { 6, 7, 8, 9, 10, -2 },
+            { 11, 12, 13, 14, 15, -3 },
+            { -1, -2, -3, -4, -5, -1 },
+            { 6, 7, 8, 9, 0, -2 }};
+        int[,] matrix3x5 = new int[,] {
+            { 1, 2, 3, 4, 5 },
+            { 6, 7, 8, 9, 10 },
+            { 11, 12, 13, 14, 10 } };
         //program.Task_1_1(8, 5);
-        program.Task_1_2(new double[] { 1, 1, 1.25 }, new double[] { 1.5, 1.75, 1.25 });
+        //program.Task_1_2(new double[] { 1, 1, 1.25 }, new double[] { 1.5, 1.75, 1.25 });
+        //program.Task_1_3b(10, 1, 10, 1);
+        program.Task_2_1(matrix5x6, matrix3x5);
     }
     #region Level 1
     public long Task_1_1(int n, int k)
@@ -22,8 +34,7 @@ public class Program
         long answer = 0;
 
         // code here
-        Console.WriteLine(n);
-        Console.WriteLine(k);
+        if (n < 0 || k < 0 || n-k < 0) return 0;
         answer = Factorial(n) / ( Factorial(k) * Factorial(n - k) );
 
         Console.WriteLine(answer);
@@ -76,7 +87,8 @@ public class Program
 
         // code here
         if(GetDistance(v1, a1, time) == GetDistance(v2, a2, time)) answer = 0;
-        answer = GetDistance(v1, a1, time) > GetDistance(v2, a2, time) ? 1 : 2; 
+        else
+            answer = GetDistance(v1, a1, time) > GetDistance(v2, a2, time) ? 1 : 2; 
         // create and use GetDistance(v, a, t); t - hours
         // first = 1, second = 2, equal = 0
 
@@ -90,12 +102,17 @@ public class Program
         int answer = 0;
 
         // code here
-        for(int i = 1; ; i++)
-            if(GetDistance(v1, a1, i) < GetDistance(v2, a2, i)){
+        int i = 0;
+        while (true){
+            i++;
+            if (GetDistance(v1, a1, i) <= GetDistance(v2, a2, i))
+            {
                 answer = i;
                 break;
             }
-        
+            
+        }
+        Console.Write(answer + " ");
         // create and use GetDistance(v, a, t); t - hours
 
         // end
@@ -114,22 +131,27 @@ public class Program
         // code here
 
         // create and use FindMax(matrix);
-        int[] aInfo = FindMax(A);
-        int[] bInfo = FindMax(B);
+        int[] aIndex = new int[2];
+        int[] bIndex = new int[2];
 
-        int temp = A[aInfo[1], aInfo[2]];
-        A[aInfo[1], aInfo[2]] = B[bInfo[1], bInfo[2]];
-        B[bInfo[1], bInfo[2]] = temp;
+        aIndex[0] = FindMax(A)[0];
+        aIndex[1] = FindMax(A)[1];
+        bIndex[0] = FindMax(B)[0];
+        bIndex[1] = FindMax(B)[1];
+
+        int temp = A[aIndex[0], aIndex[1]];
+        A[aIndex[0], aIndex[1]] = B[bIndex[0], bIndex[1]];
+        B[bIndex[0], bIndex[1]] = temp;
         // end
     }
     public static int[] FindMax(int[,] matrix){
-        int[] max = new int[] {-999999, -1, -1};
+        int indexI = 0, indexJ = 0;
         for(int i = 0; i < matrix.GetLength(0); i++){
-            for(int j = 0; i < matrix.GetLength(1); j++){
-                if(matrix[i, j] > max[0]){ max[0] = matrix[i, j]; max[1] = i; max[2] = j; }
+            for(int j = 0; j < matrix.GetLength(1); j++){
+                if (matrix[i, j] > matrix[indexI, indexJ]) { indexI = i; indexJ = j; }
             }
         }
-        return max;
+        return [indexI, indexJ];
     }
     public void Task_2_2(double[] A, double[] B)
     {
